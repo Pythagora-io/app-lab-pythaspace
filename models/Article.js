@@ -6,8 +6,13 @@ const articleSchema = new mongoose.Schema({
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   category: { type: String, required: true },
   tags: [{ type: String }],
-  status: { type: String, enum: ['draft', 'published'], default: 'draft' },
-  image: { type: String } // Add this line for the image field
+  status: { type: String, enum: ['draft', 'published', 'moderation_failed'], default: 'draft' },
+  image: { type: String },
+  moderationStatus: {
+    flagged: { type: Boolean, default: false },
+    categories: { type: Object, default: {} },
+    scores: { type: Object, default: {} }
+  }
 }, { timestamps: true });
 
 const Article = mongoose.model('Article', articleSchema);

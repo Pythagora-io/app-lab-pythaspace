@@ -5,6 +5,9 @@
   <%- include('partials/_header.ejs') %>
   <main role="main" class="container mt-4">
     <h1>Create New Article</h1>
+    <div class="alert alert-info" role="alert">
+      Please note: All articles are subject to AI-powered content moderation before publishing.
+    </div>
     <form action="/articles/create" method="POST" enctype="multipart/form-data">
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>

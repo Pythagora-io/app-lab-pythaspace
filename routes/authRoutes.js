@@ -1,7 +1,9 @@
 const express = require('express');
+const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
-const router = express.Router();
+const { isAuthenticated } = require('./middleware/authMiddleware');
+const OpenAI = require('openai');
 
 router.get('/auth/register', (req, res) => {
   res.render('register');
@@ -46,11 +48,43 @@ router.post('/auth/login', async (req, res) => {
 router.get('/auth/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) {
-      console.error('Error during session destruction:', err); // gpt_pilot_debugging_log
+      console.error('Error during session destruction:', err);
       return res.status(500).send('Error logging out');
     }
     res.redirect('/auth/login');
   });
+});
+
+router.get('/profile', isAuthenticated, async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userId);
+    const errorMessage = req.session.errorMessage;
+    const successMessage = req.session.successMessage;
+    delete req.session.errorMessage;
+    delete req.session.successMessage;
+    res.render('profile', { user, errorMessage, successMessage });
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    res.status(500).send('Error fetching user profile');
+  }
+});
+
+router.post('/update-profile', isAuthenticated, async (req, res) => {
+  try {
+    const { openaiApiKey } = req.body;
+
+    // Verify the OpenAI API key
+    const openai = new OpenAI({ apiKey: openaiApiKey });
+    await openai.models.list(); // This will throw an error if the key is invalid
+
+    await User.findByIdAndUpdate(req.session.userId, { openaiApiKey });
+    req.session.successMessage = 'Profile updated successfully';
+    res.redirect('/profile');
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    req.session.errorMessage = 'Invalid OpenAI API key or error updating profile';
+    res.redirect('/profile');
+  }
 });
 
 module.exports = router;

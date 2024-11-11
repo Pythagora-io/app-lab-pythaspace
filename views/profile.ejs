@@ -1,0 +1,32 @@
+<%- include('partials/_head') %>
+<%- include('partials/_header') %>
+
+<div class="container mt-5">
+  <h1>User Profile</h1>
+
+  <% if (errorMessage) { %>
+    <div class="alert alert-danger" role="alert">
+      <%= errorMessage %>
+    </div>
+  <% } %>
+
+  <% if (successMessage) { %>
+    <div class="alert alert-success" role="alert">
+      <%= successMessage %>
+    </div>
+  <% } %>
+
+  <form action="/update-profile" method="POST">
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input type="text" class="form-control" id="username" value="<%= user.username %>" readonly>
+    </div>
+    <div class="mb-3">
+      <label for="openaiApiKey" class="form-label">OpenAI API Key</label>
+      <input type="password" class="form-control" id="openaiApiKey" name="openaiApiKey" value="<%= user.openaiApiKey || '' %>">
+    </div>
+    <button type="submit" class="btn btn-primary">Update Profile</button>
+  </form>
+</div>
+
+<%- include('partials/_footer') %>
