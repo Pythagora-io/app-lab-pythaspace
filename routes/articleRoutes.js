@@ -1,38 +1,43 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
 const { isAuthenticated } = require('./middleware/authMiddleware');
+const Article = require('../models/Article');
+const { saveFile } = require('../utils/fileUpload');
 
-// Set up Multer for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/uploads/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)) // Ensuring unique filenames
-  }
-});
-
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
 // GET route for the article creation page
 router.get('/create', isAuthenticated, (req, res) => {
-  res.render('createArticle', {
-    script: 'https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js' // Including TinyMCE script for client-side
-  });
+  res.render('createArticle');
 });
 
 // POST route for handling article submission
-router.post('/create', isAuthenticated, upload.single('image'), (req, res) => {
-  // Handle article creation (to be implemented in the next task)
+router.post('/create', isAuthenticated, upload.single('image'), async (req, res) => {
   try {
-    // Placeholder for article creation logic
-    console.log('Article creation request:', req.body, 'File:', req.file);
-    res.redirect('/'); // Temporary redirect after successful submission
+    const { title, content, category, tags } = req.body;
+    const author = req.session.userId;
+
+    let imagePath = null;
+    if (req.file) {
+      imagePath = saveFile(req.file);
+    }
+
+    const newArticle = new Article({
+      title,
+      content,
+      author,
+      category,
+      tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
+      image: imagePath,
+      status: 'draft' // Set initial status as draft
+    });
+
+    await newArticle.save();
+
+    res.redirect(`/articles/${newArticle._id}`); // Redirect to the new article page
   } catch (error) {
-    console.error('Error handling article submission:', error.message);
-    console.error(error.stack);
+    console.error('Error handling article submission:', error);
     res.status(500).send('Error submitting article');
   }
 });

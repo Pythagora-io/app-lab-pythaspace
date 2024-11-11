@@ -16,6 +16,22 @@
         <input type="hidden" name="content" id="hidden-content">
       </div>
       <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select class="form-select" id="category" name="category" required>
+          <option value="">Select a category</option>
+          <option value="Technology">Technology</option>
+          <option value="Science">Science</option>
+          <option value="Health & Wellness">Health & Wellness</option>
+          <option value="Business & Finance">Business & Finance</option>
+          <option value="Arts & Culture">Arts & Culture</option>
+          <option value="Lifestyle">Lifestyle</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="tags" class="form-label">Tags (comma-separated)</label>
+        <input type="text" class="form-control" id="tags" name="tags">
+      </div>
+      <div class="mb-3">
         <label for="image" class="form-label">Upload Image</label>
         <input type="file" class="form-control" id="image" name="image" accept="image/*">
       </div>

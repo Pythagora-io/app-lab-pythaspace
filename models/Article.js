@@ -7,6 +7,7 @@ const articleSchema = new mongoose.Schema({
   category: { type: String, required: true },
   tags: [{ type: String }],
   status: { type: String, enum: ['draft', 'published'], default: 'draft' },
+  image: { type: String } // Add this line for the image field
 }, { timestamps: true });
 
 const Article = mongoose.model('Article', articleSchema);
