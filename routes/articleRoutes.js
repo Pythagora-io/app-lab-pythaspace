@@ -17,6 +17,7 @@ router.get('/create', isAuthenticated, (req, res) => {
 // POST route for handling article submission
 router.post('/create', isAuthenticated, upload.single('image'), async (req, res) => {
   try {
+    console.log('Article creation started');
     const { title, content, category, tags } = req.body;
     const author = req.session.userId;
 
@@ -49,15 +50,32 @@ router.post('/create', isAuthenticated, upload.single('image'), async (req, res)
     });
 
     await newArticle.save();
+    console.log('Article saved successfully:', newArticle._id);
 
     if (moderationResult.flagged) {
+      console.log('Moderation failed, rendering moderationFailed view');
       res.render('moderationFailed', { article: newArticle });
     } else {
+      console.log('Moderation passed, redirecting to article page');
       res.redirect(`/articles/${newArticle._id}`);
     }
   } catch (error) {
     console.error('Error handling article submission:', error);
     res.status(500).send('Error submitting article');
+  }
+});
+
+// GET route for displaying an individual article
+router.get('/:id', async (req, res) => {
+  try {
+    const article = await Article.findById(req.params.id).populate('author', 'username');
+    if (!article) {
+      return res.status(404).send('Article not found');
+    }
+    res.render('article', { article });
+  } catch (error) {
+    console.error('Error fetching article:', error);
+    res.status(500).send('Error fetching article');
   }
 });
 

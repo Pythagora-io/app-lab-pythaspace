@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/_head.ejs') %>
+<body>
+  <%- include('partials/_header.ejs') %>
+  <main role="main" class="container mt-4">
+    <article>
+      <h1><%= article.title %></h1>
+      <p class="text-muted">
+        By <%= article.author.username %> |
+        <%= article.createdAt.toLocaleDateString() %> |
+        Category: <%= article.category %>
+      </p>
+      <% if (article.image) { %>
+        <img src="<%= article.image %>" alt="Article image" class="img-fluid mb-3">
+      <% } %>
+      <div class="article-content">
+        <%- article.content %>
+      </div>
+      <div class="mt-3">
+        <strong>Tags:</strong>
+        <% article.tags.forEach(tag => { %>
+          <span class="badge bg-secondary"><%= tag %></span>
+        <% }) %>
+      </div>
+    </article>
+  </main>
+  <%- include('partials/_footer.ejs') %>
+</body>
+</html>

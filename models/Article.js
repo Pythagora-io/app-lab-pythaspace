@@ -15,6 +15,15 @@ const articleSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+// Add a method to populate author information
+articleSchema.pre('find', function() {
+  this.populate('author', 'username');
+});
+
+articleSchema.pre('findOne', function() {
+  this.populate('author', 'username');
+});
+
 const Article = mongoose.model('Article', articleSchema);
 
 module.exports = Article;
