@@ -5,6 +5,7 @@ const express = require("express");
 const session = require("express-session");
 const MongoStore = require('connect-mongo');
 const authRoutes = require("./routes/authRoutes");
+const articleRoutes = require('./routes/articleRoutes'); // Added for article creation and submission
 const Article = require('./models/Article'); // Importing the Article model
 
 if (!process.env.DATABASE_URL || !process.env.SESSION_SECRET) {
@@ -71,6 +72,9 @@ app.use((req, res, next) => {
 
 // Authentication Routes
 app.use(authRoutes);
+
+// Article Routes - for article creation and submission
+app.use('/articles', articleRoutes);
 
 // Root path response
 app.get("/", (req, res) => {
