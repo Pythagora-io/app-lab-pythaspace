@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
-  username: { type: String, unique: true, required: true },
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   openaiApiKey: {
     type: String,
@@ -10,17 +10,11 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-userSchema.pre('save', function(next) {
-  const user = this;
-  if (!user.isModified('password')) return next();
-  bcrypt.hash(user.password, 10, (err, hash) => {
-    if (err) {
-      console.error('Error hashing password:', err);
-      return next(err);
-    }
-    user.password = hash;
-    next();
-  });
+userSchema.pre('save', async function(next) {
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
 });
 
 userSchema.virtual('articles', {

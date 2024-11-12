@@ -16,11 +16,9 @@
     </div>
   <% } %>
 
-  <h2>Username: <%= user.username %></h2>
-
-  <h3 class="mt-4">Action Required</h3>
+  <h3 class="mt-4 animate__animated animate__fadeInLeft">Action Required</h3>
   <% if (failedModerationArticles.length > 0) { %>
-    <ul class="list-group">
+    <ul class="list-group animate__animated animate__fadeIn">
       <% failedModerationArticles.forEach(article => { %>
         <li class="list-group-item">
           <a href="/articles/<%= article._id %>?showModeration=true"><%= article.title %></a>
@@ -32,9 +30,9 @@
     <p>No articles requiring action.</p>
   <% } %>
 
-  <h3 class="mt-4">Published Articles</h3>
+  <h3 class="mt-4 animate__animated animate__fadeInLeft">Published Articles</h3>
   <% if (publishedArticles.length > 0) { %>
-    <ul class="list-group">
+    <ul class="list-group animate__animated animate__fadeIn">
       <% publishedArticles.forEach(article => { %>
         <li class="list-group-item">
           <a href="/articles/<%= article._id %>"><%= article.title %></a>
@@ -46,9 +44,9 @@
     <p>No published articles yet.</p>
   <% } %>
 
-  <h3 class="mt-4">Drafts</h3>
+  <h3 class="mt-4 animate__animated animate__fadeInLeft">Drafts</h3>
   <% if (draftArticles.length > 0) { %>
-    <ul class="list-group">
+    <ul class="list-group animate__animated animate__fadeIn">
       <% draftArticles.forEach(article => { %>
         <li class="list-group-item">
           <a href="/articles/<%= article._id %>"><%= article.title %></a>

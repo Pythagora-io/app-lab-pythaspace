@@ -5,10 +5,6 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
@@ -20,7 +16,11 @@ async function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function sendRequestToOpenAI(model, message) {
+async function sendRequestToOpenAI(model, message, apiKey) {
+  const openai = new OpenAI({
+    apiKey: apiKey,
+  });
+
   for (let i = 0; i < MAX_RETRIES; i++) {
     try {
       const response = await openai.chat.completions.create({
@@ -56,14 +56,31 @@ async function sendRequestToAnthropic(model, message) {
   }
 }
 
-async function sendLLMRequest(provider, model, message) {
+async function sendLLMRequest(provider, model, message, apiKey) {
+  let response;
   switch (provider.toLowerCase()) {
     case 'openai':
-      return sendRequestToOpenAI(model, message);
+      response = await sendRequestToOpenAI(model, message, apiKey);
+      break;
     case 'anthropic':
-      return sendRequestToAnthropic(model, message);
+      response = await sendRequestToAnthropic(model, message);
+      break;
     default:
       throw new Error(`Unsupported LLM provider: ${provider}`);
+  }
+
+  if (typeof response === 'string') {
+    try {
+      return JSON.parse(response);
+    } catch (error) {
+      console.error('Error parsing JSON response:', error);
+      return { suggestions: [] };
+    }
+  } else if (typeof response === 'object' && response !== null) {
+    return response;
+  } else {
+    console.error('Invalid response format:', response);
+    return { suggestions: [] };
   }
 }
 

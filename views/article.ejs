@@ -5,7 +5,7 @@
   <%- include('partials/_header.ejs') %>
   <% const user = (typeof session !== 'undefined' && session.userId) ? { _id: session.userId } : null; %>
   <main role="main" class="container mt-4">
-    <article>
+    <article class="card mb-4 animate__animated animate__fadeIn">
       <% if ((article.status === 'draft' || article.status === 'moderation_failed') && user && user._id.toString() === article.author._id.toString()) { %>
         <div class="mb-3">
           <a href="/articles/<%= article._id %>/edit" class="btn btn-primary">Edit Article</a>

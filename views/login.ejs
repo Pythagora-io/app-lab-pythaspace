@@ -6,12 +6,14 @@
     <main role="main">
       <div class="container mt-5">
         <h2>Login</h2>
-        <form action="/auth/login" method="POST">
+        <form action="/auth/login" method="POST" class="animate__animated animate__fadeIn">
           <div class="mb-3">
-            <input type="text" name="username" placeholder="Username" required class="form-control">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
           </div>
           <div class="mb-3">
-            <input type="password" name="password" placeholder="Password" required class="form-control">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
           </div>
           <div class="mb-3">
             <button type="submit" class="btn btn-primary">Login</button>
