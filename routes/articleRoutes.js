@@ -65,6 +65,17 @@ router.post('/create', isAuthenticated, upload.single('image'), async (req, res)
   }
 });
 
+// GET route for listing all published articles
+router.get('/list', async (req, res) => {
+  try {
+    const articles = await Article.find({ status: 'published' }).sort({ createdAt: -1 });
+    res.render('articleList', { articles });
+  } catch (error) {
+    console.error('Error fetching articles:', error);
+    res.status(500).send('Error fetching articles');
+  }
+});
+
 // GET route for displaying an individual article
 router.get('/:id', async (req, res) => {
   try {
