@@ -2,12 +2,29 @@ const express = require('express');
 const router = express.Router();
 const Comment = require('../../models/Comment');
 const Article = require('../../models/Article');
+const User = require('../../models/User');
 const { isAuthenticated } = require('../middleware/authMiddleware');
+const { moderateComment } = require('../../services/commentModerationService');
 
 // Create a new comment
 router.post('/', isAuthenticated, async (req, res) => {
   try {
     const { content, articleId } = req.body;
+    const user = await User.findById(req.user._id);
+
+    if (!user.openaiApiKey) {
+      return res.status(400).json({ message: "OpenAI API key is required to post comments." });
+    }
+
+    const moderationResult = await moderateComment(content, user.openaiApiKey);
+
+    if (moderationResult.flagged) {
+      return res.status(400).json({
+        message: "Comment flagged by moderation system",
+        moderationResult
+      });
+    }
+
     const newComment = new Comment({
       content,
       author: req.user._id,
@@ -23,6 +40,7 @@ router.post('/', isAuthenticated, async (req, res) => {
     res.status(201).json(populatedComment);
   } catch (error) {
     console.error('Error creating a new comment:', error);
+    console.error(error.stack);
     res.status(400).json({ message: error.message });
   }
 });
@@ -36,6 +54,7 @@ router.get('/article/:articleId', async (req, res) => {
     res.json(comments);
   } catch (error) {
     console.error('Error fetching comments:', error);
+    console.error(error.stack);
     res.status(500).json({ message: error.message });
   }
 });

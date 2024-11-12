@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   const commentForm = document.getElementById('commentForm');
   const commentsList = document.getElementById('commentsList');
+  const moderationMessage = document.getElementById('moderationMessage');
   const articleId = window.location.pathname.split('/').pop();
 
   function loadComments() {
@@ -37,13 +38,21 @@ document.addEventListener('DOMContentLoaded', function() {
         body: JSON.stringify({ content, articleId }),
       })
         .then(response => response.json())
-        .then(newComment => {
-          loadComments();
-          commentForm.reset();
+        .then(result => {
+          if (result.message === "Comment flagged by moderation system") {
+            moderationMessage.textContent = "Your comment was flagged by our moderation system and cannot be posted.";
+            moderationMessage.style.display = 'block';
+          } else {
+            loadComments();
+            commentForm.reset();
+            moderationMessage.style.display = 'none';
+          }
         })
         .catch(error => {
           console.error('Error posting comment:', error);
           console.error(error.stack);
+          moderationMessage.textContent = "An error occurred while posting your comment.";
+          moderationMessage.style.display = 'block';
         });
     });
   }

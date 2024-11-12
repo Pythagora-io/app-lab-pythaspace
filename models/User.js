@@ -4,7 +4,10 @@ const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
-  openaiApiKey: { type: String }
+  openaiApiKey: {
+    type: String,
+    default: ''
+  }
 });
 
 userSchema.pre('save', function(next) {
