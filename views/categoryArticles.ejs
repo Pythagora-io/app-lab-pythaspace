@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/_head.ejs') %>
+<body>
+  <%- include('partials/_header.ejs') %>
+  <main role="main" class="container mt-4">
+    <h1 class="mb-4"><%= category %> Articles</h1>
+    <div class="row">
+      <% if (articles.length > 0) { %>
+        <% articles.forEach(article => { %>
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"><%= article.title %></h5>
+                <h6 class="card-subtitle mb-2 text-muted">By <%= article.author.username %></h6>
+                <p class="card-text"><%= article.content.substring(0, 100) %>...</p>
+                <a href="/articles/<%= article._id %>" class="btn btn-primary">Read More</a>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <div class="col-12">
+          <p>No articles found in this category.</p>
+        </div>
+      <% } %>
+    </div>
+  </main>
+  <%- include('partials/_footer.ejs') %>
+</body>
+</html>

@@ -90,4 +90,16 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Add this new route after the existing routes
+router.get('/category/:category', async (req, res) => {
+  try {
+    const category = req.params.category;
+    const articles = await Article.find({ category: category, status: 'published' }).sort({ createdAt: -1 });
+    res.render('categoryArticles', { category, articles });
+  } catch (error) {
+    console.error('Error fetching category articles:', error);
+    res.status(500).send('Error fetching category articles');
+  }
+});
+
 module.exports = router;
