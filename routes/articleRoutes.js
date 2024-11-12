@@ -90,7 +90,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Add this new route after the existing routes
+// GET route for displaying articles by category
 router.get('/category/:category', async (req, res) => {
   try {
     const category = req.params.category;
@@ -99,6 +99,18 @@ router.get('/category/:category', async (req, res) => {
   } catch (error) {
     console.error('Error fetching category articles:', error);
     res.status(500).send('Error fetching category articles');
+  }
+});
+
+// GET route for displaying articles by tag
+router.get('/tag/:tag', async (req, res) => {
+  try {
+    const tag = req.params.tag;
+    const articles = await Article.find({ tags: tag, status: 'published' }).sort({ createdAt: -1 });
+    res.render('tagArticles', { tag, articles });
+  } catch (error) {
+    console.error('Error fetching tag articles:', error);
+    res.status(500).send('Error fetching tag articles');
   }
 });
 

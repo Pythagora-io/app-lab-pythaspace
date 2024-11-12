@@ -57,6 +57,8 @@ articleSchema.pre('findOne', function() {
   this.populate('author', 'username');
 });
 
+articleSchema.index({ tags: 1 });
+
 const Article = mongoose.model('Article', articleSchema);
 
 module.exports = Article;

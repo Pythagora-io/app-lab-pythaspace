@@ -17,10 +17,11 @@
       <div class="article-content">
         <%- article.content %>
       </div>
+      <!-- Replace the existing tags section with this -->
       <div class="mt-3">
         <strong>Tags:</strong>
         <% article.tags.forEach(tag => { %>
-          <span class="badge bg-secondary"><%= tag %></span>
+          <a href="/articles/tag/<%= tag %>" class="badge bg-secondary text-decoration-none"><%= tag %></a>
         <% }) %>
       </div>
     </article>
