@@ -48,7 +48,23 @@
         <% }) %>
       </div>
     </article>
+    <section id="comments" class="mt-5">
+      <h3>Comments</h3>
+      <div id="commentsList"></div>
+      <% if (user) { %>
+        <form id="commentForm" class="mt-3">
+          <div class="mb-3">
+            <label for="commentContent" class="form-label">Add a comment</label>
+            <textarea class="form-control" id="commentContent" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit Comment</button>
+        </form>
+      <% } else { %>
+        <p>Please <a href="/login">log in</a> to leave a comment.</p>
+      <% } %>
+    </section>
   </main>
   <%- include('partials/_footer.ejs') %>
+  <script src="/js/article.js"></script>
 </body>
 </html>

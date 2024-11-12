@@ -45,7 +45,11 @@ const articleSchema = new mongoose.Schema({
       type: Object,
       default: {}
     }
-  }
+  },
+  comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment'
+  }]
 }, { timestamps: true });
 
 // Add a method to populate author information

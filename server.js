@@ -8,6 +8,7 @@ const authRoutes = require("./routes/authRoutes");
 const articleRoutes = require('./routes/articleRoutes'); // Added for article creation and submission
 const Article = require('./models/Article'); // Importing the Article model
 const articleApiRoutes = require('./routes/api/articleApiRoutes');
+const commentApiRoutes = require('./routes/api/commentApiRoutes'); // Added for comment functionality
 
 if (!process.env.DATABASE_URL || !process.env.SESSION_SECRET) {
   console.error("Error: config environment variables not set. Please create/edit .env configuration file.");
@@ -79,6 +80,9 @@ app.use('/articles', articleRoutes);
 
 // API Routes for articles
 app.use('/api/articles', articleApiRoutes);
+
+// API Routes for comments
+app.use('/api/comments', commentApiRoutes); // Implementing comment API routes
 
 // Root path response
 app.get("/", (req, res) => {
