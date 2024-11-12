@@ -47,6 +47,21 @@
           <a href="/articles/tag/<%= tag %>" class="badge bg-secondary text-decoration-none"><%= tag %></a>
         <% }) %>
       </div>
+      <!-- Add this section for social sharing buttons -->
+      <% if (article.status === 'published') { %>
+        <div class="social-share mt-4">
+          <h5>Share this article:</h5>
+          <button class="btn btn-primary share-button" data-network="facebook">
+            <i class="fab fa-facebook-f"></i> Facebook
+          </button>
+          <button class="btn btn-info share-button" data-network="twitter">
+            <i class="fab fa-twitter"></i> Twitter
+          </button>
+          <button class="btn btn-secondary share-button" data-network="linkedin">
+            <i class="fab fa-linkedin-in"></i> LinkedIn
+          </button>
+        </div>
+      <% } %>
     </article>
     <section id="comments" class="mt-5">
       <h3>Comments</h3>
@@ -66,6 +81,8 @@
     </section>
   </main>
   <%- include('partials/_footer.ejs') %>
+  <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
   <script src="/js/article.js"></script>
+  <script src="/js/socialShare.js"></script>
 </body>
 </html>

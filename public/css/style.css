@@ -15,3 +15,15 @@ nav.navbar {
     height: 20px;
     margin-left: 5px;
 }
+
+.social-share {
+  margin-top: 20px;
+}
+
+.share-button {
+  margin-right: 10px;
+}
+
+.share-button i {
+  margin-right: 5px;
+}

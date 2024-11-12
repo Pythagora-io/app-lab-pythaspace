@@ -27,6 +27,7 @@
     "mongoose": "^8.1.1",
     "multer": "^1.4.5-lts.1",
     "openai": "^4.71.1",
+    "social-share-js": "^1.0.4",
     "tinymce": "^7.5.0"
   }
 }
