@@ -39,7 +39,7 @@ router.post('/create', isAuthenticated, upload.single('image'), async (req, res)
       content,
       author,
       category,
-      tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
+      tags: tags ? JSON.parse(tags).map(tag => tag.value) : [],
       image: imagePath,
       status: moderationResult.flagged ? 'moderation_failed' : 'published',
       moderationStatus: {

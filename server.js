@@ -7,6 +7,7 @@ const MongoStore = require('connect-mongo');
 const authRoutes = require("./routes/authRoutes");
 const articleRoutes = require('./routes/articleRoutes'); // Added for article creation and submission
 const Article = require('./models/Article'); // Importing the Article model
+const articleApiRoutes = require('./routes/api/articleApiRoutes');
 
 if (!process.env.DATABASE_URL || !process.env.SESSION_SECRET) {
   console.error("Error: config environment variables not set. Please create/edit .env configuration file.");
@@ -75,6 +76,9 @@ app.use(authRoutes);
 
 // Article Routes - for article creation and submission
 app.use('/articles', articleRoutes);
+
+// API Routes for articles
+app.use('/api/articles', articleApiRoutes);
 
 // Root path response
 app.get("/", (req, res) => {
