@@ -1,9 +1,12 @@
 const User = require('../../models/User');
 const isAuthenticated = async (req, res, next) => {
+  console.log('Checking authentication');
   if (req.session && req.session.userId) {
     try {
+      console.log('Session:', req.session);
       const user = await User.findById(req.session.userId);
       if (user) {
+        console.log('User authenticated:', req.session.userId);
         req.user = user;
         return next();
       }
@@ -12,6 +15,7 @@ const isAuthenticated = async (req, res, next) => {
       res.status(500).send('Error during authentication process');
     }
   }
+  console.log('Authentication failed');
   return res.status(401).send('You are not authenticated');
 };
 

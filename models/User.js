@@ -20,6 +20,12 @@ userSchema.pre('save', function(next) {
   });
 });
 
+userSchema.virtual('articles', {
+  ref: 'Article',
+  localField: '_id',
+  foreignField: 'author'
+});
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

@@ -1,0 +1,64 @@
+<%- include('partials/_head') %>
+<%- include('partials/_header') %>
+
+<div class="container mt-5">
+  <h1>User Profile</h1>
+
+  <% if (errorMessage) { %>
+    <div class="alert alert-danger" role="alert">
+      <%= errorMessage %>
+    </div>
+  <% } %>
+
+  <% if (successMessage) { %>
+    <div class="alert alert-success" role="alert">
+      <%= successMessage %>
+    </div>
+  <% } %>
+
+  <h2>Username: <%= user.username %></h2>
+
+  <h3 class="mt-4">Action Required</h3>
+  <% if (failedModerationArticles.length > 0) { %>
+    <ul class="list-group">
+      <% failedModerationArticles.forEach(article => { %>
+        <li class="list-group-item">
+          <a href="/articles/<%= article._id %>?showModeration=true"><%= article.title %></a>
+          <small class="text-muted"> - Failed moderation on <%= article.updatedAt.toLocaleDateString() %></small>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>No articles requiring action.</p>
+  <% } %>
+
+  <h3 class="mt-4">Published Articles</h3>
+  <% if (publishedArticles.length > 0) { %>
+    <ul class="list-group">
+      <% publishedArticles.forEach(article => { %>
+        <li class="list-group-item">
+          <a href="/articles/<%= article._id %>"><%= article.title %></a>
+          <small class="text-muted"> - Published on <%= article.createdAt.toLocaleDateString() %></small>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>No published articles yet.</p>
+  <% } %>
+
+  <h3 class="mt-4">Drafts</h3>
+  <% if (draftArticles.length > 0) { %>
+    <ul class="list-group">
+      <% draftArticles.forEach(article => { %>
+        <li class="list-group-item">
+          <a href="/articles/<%= article._id %>"><%= article.title %></a>
+          <small class="text-muted"> - Last updated on <%= article.updatedAt.toLocaleDateString() %></small>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>No drafts available.</p>
+  <% } %>
+</div>
+
+<%- include('partials/_footer') %>

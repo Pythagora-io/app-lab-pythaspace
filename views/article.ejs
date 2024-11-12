@@ -3,21 +3,44 @@
 <%- include('partials/_head.ejs') %>
 <body>
   <%- include('partials/_header.ejs') %>
+  <% const user = (typeof session !== 'undefined' && session.userId) ? { _id: session.userId } : null; %>
   <main role="main" class="container mt-4">
     <article>
+      <% if ((article.status === 'draft' || article.status === 'moderation_failed') && user && user._id.toString() === article.author._id.toString()) { %>
+        <div class="mb-3">
+          <a href="/articles/<%= article._id %>/edit" class="btn btn-primary">Edit Article</a>
+          <% if (article.status === 'draft') { %>
+            <form action="/articles/<%= article._id %>/publish" method="POST" style="display: inline;">
+              <button type="submit" class="btn btn-success">Publish</button>
+            </form>
+          <% } %>
+        </div>
+      <% } %>
       <h1><%= article.title %></h1>
       <p class="text-muted">
         By <%= article.author.username %> |
         <%= article.createdAt.toLocaleDateString() %> |
         Category: <%= article.category %>
       </p>
+      <% if (showModeration && article.status === 'moderation_failed') { %>
+        <div class="alert alert-warning">
+          <h4>Moderation Status</h4>
+          <p>This article requires editing due to the following reasons:</p>
+          <ul>
+            <% for (const [category, flagged] of Object.entries(article.moderationStatus.categories)) { %>
+              <% if (flagged) { %>
+                <li><%= category %></li>
+              <% } %>
+            <% } %>
+          </ul>
+        </div>
+      <% } %>
       <% if (article.image) { %>
         <img src="<%= article.image %>" alt="Article image" class="img-fluid mb-3">
       <% } %>
       <div class="article-content">
         <%- article.content %>
       </div>
-      <!-- Replace the existing tags section with this -->
       <div class="mt-3">
         <strong>Tags:</strong>
         <% article.tags.forEach(tag => { %>

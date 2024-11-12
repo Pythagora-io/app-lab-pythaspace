@@ -1,0 +1,52 @@
+<%- include('partials/_head') %>
+<%- include('partials/_header') %>
+
+<div class="container mt-5">
+  <h1>Edit Article</h1>
+  <form action="/articles/<%= article._id %>/edit" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input type="text" class="form-control" id="title" name="title" value="<%= article.title %>" required>
+    </div>
+    <div class="mb-3">
+      <label for="content" class="form-label">Content</label>
+      <textarea class="form-control" id="content" name="content" rows="10" required><%= article.content %></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="category" class="form-label">Category</label>
+      <select class="form-control" id="category" name="category" required>
+        <option value="">Select a category</option>
+        <option value="Technology" <%= article.category === 'Technology' ? 'selected' : '' %>>Technology</option>
+        <option value="Science" <%= article.category === 'Science' ? 'selected' : '' %>>Science</option>
+        <option value="Health & Wellness" <%= article.category === 'Health & Wellness' ? 'selected' : '' %>>Health & Wellness</option>
+        <option value="Business & Finance" <%= article.category === 'Business & Finance' ? 'selected' : '' %>>Business & Finance</option>
+        <option value="Arts & Culture" <%= article.category === 'Arts & Culture' ? 'selected' : '' %>>Arts & Culture</option>
+        <option value="Lifestyle" <%= article.category === 'Lifestyle' ? 'selected' : '' %>>Lifestyle</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="tags" class="form-label">Tags (comma-separated)</label>
+      <input type="text" class="form-control" id="tags" name="tags" value="<%= article.tags.join(', ') %>">
+    </div>
+    <div class="mb-3">
+      <label for="image" class="form-label">Image</label>
+      <input type="file" class="form-control" id="image" name="image">
+      <% if (article.image) { %>
+        <img src="<%= article.image %>" alt="Current article image" class="mt-2" style="max-width: 200px;">
+      <% } %>
+    </div>
+    <button type="submit" name="action" value="save_draft" class="btn btn-secondary">Save Draft</button>
+    <button type="submit" name="action" value="publish" class="btn btn-primary">Publish</button>
+  </form>
+</div>
+
+<script src="https://cdn.tiny.cloud/1/YOUR_TINYMCE_API_KEY/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+  tinymce.init({
+    selector: '#content',
+    plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+    toolbar_mode: 'floating',
+  });
+</script>
+
+<%- include('partials/_footer') %>

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const Article = require('../models/Article');
 const bcrypt = require('bcrypt');
 const { isAuthenticated } = require('./middleware/authMiddleware');
 const OpenAI = require('openai');
@@ -62,7 +63,34 @@ router.get('/profile', isAuthenticated, async (req, res) => {
     const successMessage = req.session.successMessage;
     delete req.session.errorMessage;
     delete req.session.successMessage;
+
     res.render('profile', { user, errorMessage, successMessage });
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    res.status(500).send('Error fetching user profile');
+  }
+});
+
+router.get('/user-profile', isAuthenticated, async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userId);
+    const publishedArticles = await Article.find({ author: user._id, status: 'published' }).sort({ createdAt: -1 });
+    const draftArticles = await Article.find({ author: user._id, status: 'draft' }).sort({ createdAt: -1 });
+    const failedModerationArticles = await Article.find({ author: user._id, status: 'moderation_failed' }).sort({ createdAt: -1 });
+
+    const errorMessage = req.session.errorMessage;
+    const successMessage = req.session.successMessage;
+    delete req.session.errorMessage;
+    delete req.session.successMessage;
+
+    res.render('userProfile', {
+      user,
+      publishedArticles,
+      draftArticles,
+      failedModerationArticles,
+      errorMessage,
+      successMessage
+    });
   } catch (error) {
     console.error('Error fetching user profile:', error);
     res.status(500).send('Error fetching user profile');
