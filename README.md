@@ -87,8 +87,6 @@ Follow these steps to set up and run the project:
 
 ### License
 
-The project is proprietary (not open source), and all rights are reserved.
+The project is open source, licensed under the MIT License. See the [LICENSE](LICENSE).
 
-```
-© 2024 PythaSpace.
-```
+Copyright © 2024 Pythagora-io. 
