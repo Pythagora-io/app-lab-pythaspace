@@ -12,14 +12,14 @@ router.get('/auth/register', (req, res) => {
 
 router.post('/auth/register', async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = new User({ email, password });
+    const { username, email, password } = req.body;
+    const user = new User({ username, email, password });
     await user.save();
     req.session.userId = user._id;
     res.redirect('/');
   } catch (error) {
     console.error('Registration error:', error);
-    res.render('register', { error: 'Email already in use' });
+    res.render('register', { error: 'Username or email already in use' });
   }
 });
 
